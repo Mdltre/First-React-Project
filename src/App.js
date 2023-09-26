@@ -15,16 +15,23 @@ const sportingGoods = [
 ]
 
 function App() {
+  const[data, setData] = useState(sportingGoods)
   const[txtValue, setTextValue] = useState('')
   const [showOnlyStock, setShowOnlyStock] = useState(false)
   const [form, setForm] = useState({
-    nameItem: '',
-    priceItem: 0,
-    stockItem: 0
+    id: 0,
+    name: '',
+    price: 0,
+    stock: 0
   })
 
   const handleClick = () => {
     alert('Clicked')
+  }
+
+  const onClickSubmit = (e) => {
+    e.preventDefault();
+    setData([...data, {id: data.length +1, ...form}]);
   }
 
   return (
@@ -32,18 +39,18 @@ function App() {
       <form style={{display: "flex", flexDirection: "column", gap: 10, marginBottom: 20}}>
         <div>
         <label htmlFor='nameItem'>Name: </label>
-        <input id="nameItem" type="text" value={form.nameItem} onChange={(e)=> setForm({ ...form, nameItem: e.target.value})}/>
+        <input id="nameItem" type="text" value={form.nameItem} onChange={(e)=> setForm({ ...form, name: e.target.value})}/>
         </div>
         <div>
         <label htmlFor='priceItem'>Price: </label>
-        <input id="priceItem" type="number" value={form.priceItem} onChange={(e)=> setForm({ ...form, priceItem: e.target.value})}/>
+        <input id="priceItem" type="number" value={form.priceItem} onChange={(e)=> setForm({ ...form, price: e.target.value})}/>
         </div>
         <div>
         <label htmlFor='stockItem'>Stock: </label>
-        <input id="stockItem" type="number" value={form.stockItem} onChange={(e)=> setForm({ ...form, stockItem: e.target.value})}/>
+        <input id="stockItem" type="number" value={form.stockItem} onChange={(e)=> setForm({ ...form, stock: e.target.value})}/>
         </div>
         <div>
-        <button style={{width:"100%"}} onClick={handleClick}>Submit</button>
+        <button style={{width:"100%"}} onClick={onClickSubmit}>Submit</button>
         </div>
       </form>
 
@@ -59,14 +66,14 @@ function App() {
         <tbody>
         <Header/>
         <Category/>
-        <Items items={sportingGoods} includePrice query={txtValue} showOnlyStock={showOnlyStock} ></Items>
+        <Items items={data} includePrice query={txtValue} showOnlyStock={showOnlyStock} ></Items>
         </tbody>
         <tr>
           <td colSpan="2" style={{textAlign: "right"}}>
             Total
           </td>
           <td colSpan="2" style={{textAlign: "center"}}>
-            {sportingGoods.reduce((total, sportingGood) => {return total + sportingGood.stock}, 0)}
+            {data.reduce((total, sportingGood) => {return total + parseInt(sportingGood.stock)}, 0)}
           </td>
         </tr>
       </table>
